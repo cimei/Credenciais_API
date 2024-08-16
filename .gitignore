@@ -1,0 +1,13 @@
+/__pycache__
+/project/__pycache__
+/project/core/__pycache__
+/project/envio/__pycache__
+/project/error_pages/__pycache__
+/docs/source/
+/docs/make.bat
+/docs/Makefile
+/build/
+/dist/
+/client_secret.json
+/client oauth.txt
+/token.json

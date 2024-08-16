@@ -1,0 +1,65 @@
+{% extends "template_gov.html" %}
+{% block content %}
+
+
+
+{#
+{% if 'APIPGD_AUTH_USER'|pega_var_env != '' and 'APIPGD_AUTH_USER'|pega_var_env != Nome %}
+#}
+
+{% if admin == 'ok' %}
+
+<div class="row mt-5">
+  <div class="d-flex justify-content-center  flex-wrap">
+    <h2>URL da API: <b>{{ 'APIPGD_URL'|pega_var_env }}</b> </h2>
+  </div>
+</div>    
+
+<div class="row mt-5">
+  <div class="d-flex justify-content-center  flex-wrap">
+
+    {% with 
+      icon="fa-circle-plus", 
+      title="Registrar nova credencial",
+      description="Cria uma credencial nova para acesso à API.",
+      link=url_for('envio.registrar')
+    %}
+      {% include "card_menu.html" %}
+    {% endwith %}
+
+    {% with 
+      icon="fa-pen-to-square", 
+      title="Consultar/editar credenciais",
+      description="Lista credenciais já registradas na API, podendo editá-las",
+      link=url_for('envio.listar')
+    %}
+      {% include "card_menu.html" %}
+    {% endwith %}
+
+    {% with 
+      icon="fa-layer-group", 
+      title="Solicitações em lote",
+      description="Ações referentes às solicitações feitas via formulário google.",
+      link=url_for('envio.lote')
+    %}
+      {% include "card_menu.html" %}
+    {% endwith %}
+
+  </div>
+</div>
+
+{% else %}
+
+<div class="main-content pl-sm-3 mt-4" id="main-content">
+  <h1>Bem vindo!</h1>
+  <h4 class="fs-5 fw-light">Via opção no canto superior direito, informe os dados do admin na API.</h4>
+</div>
+
+</div>
+
+
+{% endif %}
+
+
+
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "template_gov.html" %}
+{% block content %}
+
+<div class="col mb-5">
+  <div class="br-breadcrumb">
+    <ul class="crumb-list">
+      <li class="crumb home"><a class="br-button circle" href="{{url_for('core.inicio')}}"><span class="sr-only">Página inicial</span><i class="fa fa-home"></i></a></li>
+      <li class="crumb" data-active="active"><i class="icon fa fa-chevron-right"><a href="{{url_for('envio.lote')}}"></i><span>Solicitações em lote</span></a></li>
+      <li class="crumb" data-active="active"><i class="icon fa fa-chevron-right"></i><span>Ignoradas</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex flex-column">
+      <h5 class="header-list"><b>Lista de solicitações de credencial que foram ignoradas</b></h5>
+      <div class="d-flex justify-content-around">
+      </div>
+    </div>
+  </div>
+    <div class="card-body">
+      <table id="table"
+            data-toggle="table"
+            data-filter-control="true"
+            data-show-search-clear-button="true"
+            data-sortable="true"
+            classes="table-sm"
+            data-show-columns="true"
+            data-show-columns-toggle-all="true"
+            class="table table-striped table-hover table-sm">
+        <caption>Ignoradas</caption>
+        <thead>
+          <tr>
+            <th scope="col"><p align = "center">#</p></th>
+            <th scope="col" data-sortable="Nome" ><p align = "center">Nome</p></th>
+            <th scope="col" data-sortable="E-mail"> <p align = "center">E-mail</p></th>
+            <th scope="col" data-sortable="E-mail"> <p align = "center">Órgão</p></th>
+            <th scope="col" data-field="Sistema"><p align = "center">Sistema</p></th>
+            <th scope="col" data-field="Referência"><p align = "center">Referência</p></th>
+            <th scope="col" data-field="Autorizadora"><p align = "center">Autorizadora</p></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in lista %}
+            <tr>
+              <th scope="row"><p align = "center"> {{lista.index(item) + 1}} </p></th>
+              <td><p align = "center"> {{item[1]}} </p></td>
+              <td><p align = "center"> {{item[2]}} </p></td>
+              <td><p align = "center"> {{item[7]}} </p></td>
+              <td><p align = "center"> {{item[3]}} </p></td>
+              <td><p align = "center"> {{item[4]}} </p></td>
+              <td><p align = "center"> {{item[5]}} </p></td>
+          {% endfor %}    
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Credenciais API PGD IN 24</title>
+  <!-- Fonte Rawline-->
+  <link rel="stylesheet"
+    href="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css" />
+  <!-- Fonte Raleway-->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&amp;display=swap" />
+  <!-- Design System de Governo-->
+  <link rel="stylesheet" href="/static/css/br-gov/core/dist/core.css">
+  <!-- Fontawesome-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.22.1/extensions/filter-control/bootstrap-table-filter-control.css">
+
+  <link rel="stylesheet" href="/static/css/index.css">
+
+  <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico">
+
+</head>
+
+<body>
+
+  
+
+
+  <div class="template-base">
+
+    <!-- header escuro no topo da página -->
+  <header>
+    <div class="">
+      <div class="">
+        <div id="barra-brasil" style="background:#7F7F7F; height: 20px; padding:0 0 0 10px;display:block;">
+          <ul id="menu-barra-temp" style="list-style:none;">
+            <li
+              style="display:inline; float:left;padding-right:10px; margin-right:10px; border-right:1px solid #EDEDED">
+              <a href="http://brasil.gov.br"
+                style="font-family:sans,sans-serif; text-decoration:none; color:white;">Portal do Governo Brasileiro</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+    <!-- navegação via teclas de acesso rápido (shift alt nº) -->
+    <nav class="br-skiplink"><a class="br-item" href="#main-content" accesskey="1">Ir para o conteúdo (1/4) <span
+          class="br-tag text ml-1">1</span></a>
+      <a class="br-item" href="#header-navigation" accesskey="2">Ir para o menu (2/4) <span
+          class="br-tag text ml-1">2</span></a>
+      <a class="br-item" href="#main-searchbox" accesskey="3">Ir para a busca (3/4) <span
+          class="br-tag text ml-1">3</span></a>
+      <a class="br-item" href="#footer" accesskey="4">Ir para o rodapé (4/4) <span class="br-tag text ml-1">4</span></a>
+    </nav>
+
+    <!-- Topo da página com logo, nome e descrição do sistema e botões de login, registro e logout -->
+    <header class="br-header mb-4" id="header" data-sticky="data-sticky">
+      <div class="container-fluid">
+        <div class="d-flex ">
+
+          <div class="header-menu align-items-center">
+            <div class="header-menu-trigger" id="header-navigation">
+              <button class="br-button large circle" type="button" aria-label="Menu" data-toggle="menu"
+                data-target="#main-navigation" id="navigation"><i class="fa fa-bars" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="header-info">
+              <div class="header-title"><a href="{{url_for('core.inicio')}}">Credenciais API PGD IN 24</a></div>
+              <div class="header-subtitle">Gestão das Credenciais de acesso à API PGD IN 24</div>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <div class="header-links dropdown">
+             
+
+              <div class="br-list">
+
+                <div class="header">
+                  <div class="title">Acesso Rápido</div>
+                </div>
+
+              </div>
+
+              <a class="br-button circle" href="{{url_for('core.inicio')}}"><span class="sr-only">Página
+                  inicial</span><i class="fa fa-home"></i></a>
+
+            </div><span class="br-divider vertical mx-half mx-sm-1"></span>
+
+         
+
+            <div class="header-login">
+
+              {% if 'APIPGD_AUTH_USER'|pega_var_env == '' or 'APIPGD_AUTH_USER'|pega_var_env == Nome %}
+                <div class="header-sign-in">
+                  <button class="br-sign-in small" type="button" data-trigger="login"
+                    onclick="window.location.href='{{url_for("core.informa_adm")}}'"><i class="fa fa-user"
+                      aria-hidden="true"></i><span class="d-sm-inline">Informar ADM</span></a>
+                  </button>
+                </div>
+                <div class="header-avatar"></div>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </header>
+
+    <!-- Parte principal que contem o menu suspenso à esquerda e blocos do sistema -->
+
+    <main class="d-flex flex-fill mb-5" id="main">
+      <!-- <div class="container-lg d-flex"> -->
+      <div class="container-fluid">
+        
+
+          <!-- menu suspenso à esquerda -->
+
+          <div class="br-menu" id="main-navigation">
+            <div class="menu-container">
+              <div class="menu-panel">
+                <div class="menu-header">
+                  <div class="menu-title"><span>Credenciais API PGD IN 24</span></div>
+                  <div class="menu-close">
+                    <button class="br-button circle" type="button" aria-label="Fechar o menu" data-dismiss="menu"><i
+                        class="fa fa-times" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <nav class="menu-body">
+
+                  <a class="menu-item divider" href="{{url_for('core.info')}}"><span class="icon"><i
+                        class="fa fa-question" aria-hidden="true"></i></span><span class="content">Sobre</span></a>
+
+                  {% if 'APIPGD_AUTH_USER'|pega_var_env != '' and 'APIPGD_AUTH_USER'|pega_var_env != Nome %}
+
+                  <div class="menu-folder"><a class="menu-item" href="javascript: void(0)"><span class="icon"><i
+                          class="fa fa-rocket" aria-hidden="true"></i></span><span class="content">Credenciais</span></a>
+                    <ul>
+                      <li><a class="menu-item" href="{{url_for('envio.registrar')}}"><span class="icon"><i
+                              class="fa fa-folder" aria-hidden="true"></i></span><span class="content">Registrar</span></a></li>
+                      <li><a class="menu-item" href="{{url_for('envio.listar')}}"><span class="icon"><i
+                              class="fa fa-cloud" aria-hidden="true"></i></span><span class="content">Listar</span></a></li>
+                    </ul>
+                  </div>
+
+
+                  {% endif %}
+
+                </nav>
+
+                <div class="menu-footer">
+
+                </div>
+
+              </div>
+              <div class="menu-scrim" data-dismiss="menu" tabindex="0"></div>
+            </div>
+          </div>
+
+          <!-- <div class="col mb-5"> -->
+
+          <!-- <div class="main-content pl-sm-3 mt-4" id="main-content"> -->
+          <div class="main-content" id="main-content">
+
+            <!-- Tipos de mensagens flash -->
+
+            {% with erros = get_flashed_messages(category_filter=["erro"]) %}
+            {% if erros %}
+
+            {% for message in erros %}
+              <div class="container-fluid">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                  <strong>Erro.</strong> {{message}}                
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+              </div>
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+
+            {% with sucessos = get_flashed_messages(category_filter=["sucesso"]) %}
+            {% if sucessos %}
+
+            {% for message in sucessos %}
+              <div class="container-fluid">
+                <div class="alert alert-success alert-dismissible" role="alert">
+                  <strong>Sucesso!</strong> {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+              </div>
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+
+            {% with perigos = get_flashed_messages(category_filter=["perigo"]) %}
+            {% if perigos %}
+
+            {% for message in perigos %}
+              <div class="container-fluid">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>Atenção!</strong> {{message}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                </div>
+              </div>
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+
+
+            <!-- BLOCO CONTENDO AS VÁRIAS TELAS DO SISTEMA  -->
+            {% block content %}
+
+            {% endblock %}
+
+          </div>
+
+          <!-- </div> -->
+
+       
+      </div>
+    </main>
+
+
+
+    <!-- rodapé da página  -->
+
+    <footer class="br-footer pt-3" id="footer">
+      <div class="container-lg">
+        <div class="info">
+          {% set ver = namespace(num = '1.0.0') %}
+          <div class="text-down-01 text-medium pb-3"> v. {{ ver.num }} <small>cbt</small>
+          </div>
+        </div>
+    </footer>
+
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.22.1/dist/bootstrap-table.min.js"></script>
+  <script
+    src="https://unpkg.com/bootstrap-table@1.22.1/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
+
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <!-- Barra Brasil -->
+  <script type="text/javascript" src="https://barra.brasil.gov.br/barra_2.0.js"></script>
+
+  <!-- js padrão digital  -->
+  <script src="{{ url_for('static', filename='css/br-gov/core/dist/core-init.js') }}"></script>
+  <script src="{{ url_for('static', filename='css/br-gov/core/dist/core.js') }}"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script defer="defer" src="{{ url_for('static', filename='js/template.js') }}"></script>
+  <script defer="defer" src="{{ url_for('static', filename='js/table-pt-BR.js') }}"></script>
+
+</body>
+
+
+</html>

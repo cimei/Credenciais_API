@@ -1,0 +1,32 @@
+{% extends "template_gov.html" %}
+{% block content %}
+
+<div class="template-erro">
+  <div class="row my-5">
+      <div class="col imagem-erro">
+          <img
+              src="/static/401.jpg"
+              alt="imagem de erro"
+          />
+      </div>
+      <div class="col erro-text">
+          <div class="text-support-03">
+              <p class="text-up-06 text-semi-bold my-3">
+                  Estamos constrangidos em te ver por aqui
+              </p>
+          </div>
+          <div class="text-secondary-06">
+              <p class="text-up-03 text-medium my-3">
+                ERRO 401 - AÇÃO NÃO AUTORIZADA!
+              </p>
+          </div>
+          <p class="my-3">
+            O seu usuário não foi ativado ainda, ou não tem uma instituição associada,
+            por esta razão a página solicitada não pode ser mostrada. 
+            Verifique com a área que utilizado o sistema.
+          </p>
+      </div>
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "template_gov.html" %}
+{% block content %}
+
+<div class="col mb-5">
+  <div class="br-breadcrumb">
+    <ul class="crumb-list">
+      <li class="crumb home"><a class="br-button circle" href="{{url_for('core.inicio')}}"><span class="sr-only">Página inicial</span><i class="fa fa-home"></i></a></li>
+      <li class="crumb" data-active="active"><i class="icon fa fa-chevron-right"></i><span>Credenciais</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex flex-column">
+      <h5 class="header-list"><b>Lista das credenciais na API</b></h5>
+      <div class="d-flex justify-content-around">
+      </div>
+    </div>
+  </div>
+    <div class="card-body">
+      <table id="table"
+            data-toggle="table"
+            data-filter-control="true"
+            data-show-search-clear-button="true"
+            data-sortable="true"
+            classes="table-sm"
+            data-show-columns="true"
+            data-show-columns-toggle-all="true"
+            class="table table-striped table-hover table-sm">
+        <caption>Credenciais</caption>
+        <thead>
+          <tr>
+            <th scope="col"><p align = "center">#</p></th>
+            <th scope="col" data-field="E-mail" data-filter-control="input" data-sortable="true" data-filter-control-placeholder="Termo de pesquisa..."><p align = "center">E-mail</p></th>
+            <th scope="col" data-field="Admin?"> <p align = "center">Admin?</p></th>
+            <th scope="col" data-sortable="Desabilitado?"><p align = "center">Desabilitado?</p></th>
+            <th scope="col" data-sortable="Unidade" data-filter-control="input" data-sortable="true" data-filter-control-placeholder="Termo de pesquisa..."><p align = "center">Unidade</p></th>
+            <th scope="col" data-sortable="Autorizadora" data-filter-control="input" data-sortable="true" data-filter-control-placeholder="Termo de pesquisa..."><p align = "center">Autorizadora</p></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in lista %}
+            <tr>
+              <th scope="row"><p align = "center"> {{lista.index(item) + 1}} </p></th>
+              <td><p align = "center"> <abbr title="Editar"><a href="{{url_for('envio.editar',email=item['email'])}}">{{item['email']}} </a></abbr></p></td>
+              <td><p align = "center"> 
+                {% if item['is_admin'] == 'true' %}
+                  <span class="text-danger">Sim</span>
+                {% else %}
+                  Não
+                {% endif %}     
+              </p></td>
+              <td><p align = "center"> 
+                {% if item['disabled'] == 'true' %}
+                  <span class="text-danger">Sim</span>
+                {% else %}
+                  Não
+                {% endif %}     
+              </p></td>
+              <td><p align = "center"> {{item['origem_unidade']}} </p></td>
+              <td><p align = "center"> {{item['cod_unidade_autorizadora']}} </p></td>
+          {% endfor %}    
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+
+
+
+
+{% endblock %}
