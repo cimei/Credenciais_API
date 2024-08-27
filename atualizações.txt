@@ -1,2 +1,11 @@
 ## Atualizações ##
 
+A partir do Credenciais_API criei o Credenciais_API_local, na pasta temp, para poder gerar um executável via pyinstaler.
+Para conseguir salvar no github, tive que criar o CredenciaiAPI, também na pasta temp. Este está sem os secrets do google.
+Vou tentar usar somente este último. Se der certo, deleto os demais.
+
+27/08/2024
+
+Gerencia credenciais das duas APIs (homologação e produção)
+
+v1.0.0

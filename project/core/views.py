@@ -48,7 +48,8 @@ def informa_adm():
 
     if form.validate_on_submit():
                     
-        os.environ["APIPGD_URL"]           = form.url.data
+        os.environ["APIPGD_URL_HOM"]       = form.url_hom.data
+        os.environ["APIPGD_URL_PROD"]      = form.url_prod.data
         os.environ["APIPGD_AUTH_USER"]     = form.email.data
         os.environ["APIPGD_AUTH_PASSWORD"] = form.password.data
         
@@ -56,8 +57,11 @@ def informa_adm():
         
         return render_template ('index.html', admin = 'ok')   
     
-    if os.getenv("APIPGD_URL") != '' and os.getenv("APIPGD_URL") != None:
-        form.url.data = os.getenv("APIPGD_URL")
+    if os.getenv("APIPGD_URL_HOM") != '' and os.getenv("APIPGD_URL_HOM") != None:
+        form.url_hom.data = os.getenv("APIPGD_URL_HOM")
+        
+    if os.getenv("APIPGD_URL_PROD") != '' and os.getenv("APIPGD_URL_PROD") != None:
+        form.url_prod.data = os.getenv("APIPGD_URL_PROD")    
         
     if os.getenv("APIPGD_AUTH_USER") != '' and os.getenv("APIPGD_AUTH_USER") != None:
         form.email.data = os.getenv("APIPGD_AUTH_USER")    

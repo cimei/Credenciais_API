@@ -86,56 +86,96 @@ def pega_token():
 
     headers = {'Content-Type': "application/x-www-form-urlencoded", 'Accept': "application/json"}
     
-    if os.getenv('APIPGD_URL')[-1] == '/': 
-        api_url_login = os.getenv('APIPGD_URL') + 'token'
+    if os.getenv('APIPGD_URL_HOM')[-1] == '/': 
+        api_url_login_hom = os.getenv('APIPGD_URL_HOM') + 'token'
     else:
-        api_url_login = os.getenv('APIPGD_URL') + '/token'
+        api_url_login_hom = os.getenv('APIPGD_URL_HOM') + '/token'
+        
+    if os.getenv('APIPGD_URL_PROD')[-1] == '/': 
+        api_url_login_prod = os.getenv('APIPGD_URL_PROD') + 'token'
+    else:
+        api_url_login_prod = os.getenv('APIPGD_URL_PROD') + '/token'    
 
     try:
-        response = requests.post(api_url_login, headers=headers ,data=json.dumps(string))
+        response_hom = requests.post(api_url_login_hom, headers=headers ,data=json.dumps(string))
     except:
-        print('** ERRO AO TENTAR CONECTAR COM A API **')
-        flash('Não consegui conexão com a API, verifique se '+os.getenv('APIPGD_URL')+' está on line.','erro')
-        abort(404) 
-
-    rlogin_json = response.json()
+        print('** ERRO AO TENTAR CONECTAR COM A API DE HOMOLOGAÇÃO **')
+        flash('Não consegui conexão com a API, verifique se '+os.getenv('APIPGD_URL_HOM')+' está on line.','erro')
         
     try:
-        token = rlogin_json['access_token']
-        # tipo =  rlogin_json['token_type'] 
+        response_prod = requests.post(api_url_login_prod, headers=headers ,data=json.dumps(string))
     except:
-         retorno_API = rlogin_json['detail']  
+        print('** ERRO AO TENTAR CONECTAR COM A API DE PRODUÇÃO **')
+        flash('Não consegui conexão com a API, verifique se '+os.getenv('APIPGD_URL_PROD')+' está on line.','erro')    
+
+    rlogin_json_hom = response_hom.json()
+    rlogin_json_prod = response_prod.json()
+        
+    try:
+        token_hom = rlogin_json_hom['access_token']
+    except:
+         retorno_API = rlogin_json_hom['detail']  
          print ('** RETORNO DA API: ',retorno_API)
          print ('** Valores informados:')
-         print ('** API URL login: ', api_url_login)
+         print ('** API URL login: ', api_url_login_hom)
          print ('** User API: ', user_api)
          print ('** Senha API: ', senha_api)
          
-         flash('Não consegui pegar um token junto à API. '+retorno_API+'.','erro')
-         abort(403)  
+         flash('Não consegui pegar um token junto à API de homologação. '+retorno_API+'.','erro')
+         token_hom = 'sem_token'  
+         
+    try:
+        token_prod = rlogin_json_prod['access_token']
+    except:
+         retorno_API = rlogin_json_prod['detail']  
+         print ('** RETORNO DA API: ',retorno_API)
+         print ('** Valores informados:')
+         print ('** API URL login: ', api_url_login_prod)
+         print ('** User API: ', user_api)
+         print ('** Senha API: ', senha_api)
+         
+         flash('Não consegui pegar um token junto à API de produção. '+retorno_API+'.','erro')
+         token_prod = 'sem_token'      
         
-    return(token)
+    return (token_hom, token_prod)
   
 
 # função que gera lista de credenciais existentes na API
 def lista_credenciais_API():
     
-    if os.getenv('APIPGD_URL') != None and os.getenv('APIPGD_URL') != "" and \
+    if (os.getenv('APIPGD_URL_HOM') != None and os.getenv('APIPGD_URL_HOM') != "") or (os.getenv('APIPGD_URL_PROD') != None and os.getenv('APIPGD_URL_PROD') != "") and \
        os.getenv('APIPGD_AUTH_USER') != None and os.getenv('APIPGD_AUTH_USER') != "" and \
        os.getenv('APIPGD_AUTH_PASSWORD') != None and os.getenv('APIPGD_AUTH_PASSWORD') != "":  
 
         # pega token de acesso à API de envio de dados
         
-        token = pega_token()      
+        tokens = pega_token()  
+        
+        token_hom = tokens[0]
+        token_prod = tokens[1] 
+        
+        if token_hom != 'sem_token':   
 
-        head = {'Authorization': 'Bearer {}'.format(token)}
+            head = {'Authorization': 'Bearer {}'.format(token_hom)}
 
-        r = requests.get(os.getenv('APIPGD_URL') + '/users', headers= head)
-
-        # if r.ok:
-        #     print('request ok')
+            r = requests.get(os.getenv('APIPGD_URL_HOM') + '/users', headers= head)
             
-        return r.text        
+            resultado_hom_dict = ast.literal_eval(r.text.replace('[','').replace(']','').replace('false','"false"').replace('true','"true"'))
+        else:
+            resultado_hom_dict = []  
+            
+        if token_prod != 'sem_token':   
+
+            head = {'Authorization': 'Bearer {}'.format(token_prod)}
+
+            r = requests.get(os.getenv('APIPGD_URL_PROD') + '/users', headers= head)
+            
+            resultado_prod_dict = ast.literal_eval(r.text.replace('[','').replace(']','').replace('false','"false"').replace('true','"true"'))
+        else:
+            resultado_prod_dict = []      
+        
+            
+        return (resultado_hom_dict, resultado_prod_dict)        
                 
     else:
         return ('erro_credenciais')
@@ -144,34 +184,62 @@ def lista_credenciais_API():
 # função que cria, ou altera, uma credencial na API
 def put_credencial_API(dic_credencial,tipo):
     
-    if os.getenv('APIPGD_URL') != None and os.getenv('APIPGD_URL') != "" and \
+    if (os.getenv('APIPGD_URL_HOM') != None and os.getenv('APIPGD_URL_HOM') != "") or (os.getenv('APIPGD_URL_PROD') != None and os.getenv('APIPGD_URL_PROD') != "") and \
        os.getenv('APIPGD_AUTH_USER') != None and os.getenv('APIPGD_AUTH_USER') != "" and \
        os.getenv('APIPGD_AUTH_PASSWORD') != None and os.getenv('APIPGD_AUTH_PASSWORD') != "":  
 
         # pega token de acesso à API de envio de dados
         
-        token = pega_token()
-    
-        headers = {'Content-Type': "application/json", 'Accept': "application/json", 'Authorization': 'Bearer {}'.format(token)}
+        tokens = pega_token()
+        
+        token_hom = tokens[0]
+        token_prod = tokens[1]
+        
+        # Cadastra na API de homologação
+        
+        headers = {'Content-Type': "application/json", 'Accept': "application/json", 'Authorization': 'Bearer {}'.format(token_hom)}
                     
         # faz o put na API via dumps json do dicionário    
-        r_put = requests.put(os.getenv('APIPGD_URL') + '/user/'+dic_credencial['email'], headers= headers, data=json.dumps(dic_credencial))
+        r_hom_put = requests.put(os.getenv('APIPGD_URL_HOM') + '/user/'+dic_credencial['email'], headers= headers, data=json.dumps(dic_credencial))
+        
+        # Cadastra na API de produção
+        
+        headers = {'Content-Type': "application/json", 'Accept': "application/json", 'Authorization': 'Bearer {}'.format(token_prod)}
+                    
+        # faz o put na API via dumps json do dicionário    
+        r_prod_put = requests.put(os.getenv('APIPGD_URL_PROD') + '/user/'+dic_credencial['email'], headers= headers, data=json.dumps(dic_credencial))
 
-        if r_put.ok:
+        if r_hom_put.ok:
             if tipo == 'um':
-                flash('Credencial registrada!','sucesso')
+                flash('Credencial registrada na API de homologação!','sucesso')
         else:
-            retorno_API = re.search(r'\bmsg[\W|w]+[\w+\s]+',r_put.text) 
+            retorno_API = re.search(r'\bmsg[\W|w]+[\w+\s]+',r_hom_put.text) 
 
             if retorno_API:
                 retorno_API_msg = retorno_API.group()[6:]
                 flash (str(retorno_API_msg),'erro')
             else:
-                flash ('*** Texto API: '+str(r_put.text),'erro')
-                if str(r_put.text) == '{"detail":"Unauthorized"}':
+                flash ('*** Texto API: '+str(r_hom_put.text),'erro')
+                if str(r_hom_put.text) == '{"detail":"Unauthorized"}':
                     abort(401)
                     
-        return r_put.ok        
+        if r_prod_put.ok:
+            if tipo == 'um':
+                flash('Credencial registrada na API de produção!','sucesso')
+        else:
+            retorno_API = re.search(r'\bmsg[\W|w]+[\w+\s]+',r_prod_put.text) 
+
+            if retorno_API:
+                retorno_API_msg = retorno_API.group()[6:]
+                flash (str(retorno_API_msg),'erro')
+            else:
+                flash ('*** Texto API: '+str(r_prod_put.text),'erro')
+                if str(r_prod_put.text) == '{"detail":"Unauthorized"}':
+                    abort(401)            
+                    
+        return r_hom_put.ok, r_prod_put
+    
+      
                 
     else:
         return ('erro_credenciais')                
@@ -328,11 +396,11 @@ def editar(email):
         
         return redirect(url_for('envio.listar'))
     
-    token = pega_token()
+    tokens = pega_token()
     
-    head = {'Authorization': 'Bearer {}'.format(token)}
+    head = {'Authorization': 'Bearer {}'.format(tokens[0])}
 
-    r = requests.get(os.getenv('APIPGD_URL') + '/user/' + email, headers= head)
+    r = requests.get(os.getenv('APIPGD_URL_HOM') + '/user/' + email, headers= head)
 
     # if r.ok:
     #     print('request ok')
@@ -368,10 +436,9 @@ def listar():
     """
     
     resultado = lista_credenciais_API()
+            
     
-    resultado_dict = ast.literal_eval(resultado.replace('[','').replace(']','').replace('false','"false"').replace('true','"true"'))
-
-    return render_template('lista_credenciais.html', lista = resultado_dict)
+    return render_template('lista_credenciais.html', lista = resultado)
 
 
 ## triagem para registro de credenciais em lote
@@ -461,7 +528,7 @@ def triagem_lote():
                 
                 retorno = put_credencial_API(dic_credencial,'lote')
                 
-                if retorno:
+                if retorno[0] and retorno[1]:
                     # coloca status processado = SIM na planilha. Coluna I.
                     result = (service.spreadsheets().values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID,
                                                                  range='I'+str(field.linha.data),
@@ -470,7 +537,10 @@ def triagem_lote():
                                  .execute())
                 
                     # envia um e-mail para o solicitante da credencial
-                    mensagem = 'Credenciais para a API: '+os.getenv('APIPGD_URL')+'\n'+'Credencial: ' + field.email.data + '. Senha: ' + senha + '.'
+                    mensagem = 'Credenciai para as APIs de homologação e produção: '+'\n'+\
+                                os.getenv('APIPGD_URL_HOM')+'\n'+\
+                                os.getenv('APIPGD_URL_PROD')+'\n'+\
+                               'Credencial: ' + field.email.data + '. Senha: ' + senha + '.'
                     e_mail = gmail_send_message(mensagem, field.email.data, 'seges.cginf@gmail.com', 'Credencial para API do PGD IN 24 ('+field.orgao.data+')')
                     
                     # coloca o id do e-mail enviado na planilha. Coluna K.
@@ -493,7 +563,7 @@ def triagem_lote():
                                                                 body={"values": [['IGNORADA']]})
                                  .execute())   
                 # envia um e-mail de recusa para o solicitante da credencial
-                mensagem = 'A solicitação de credencial para a API: '+os.getenv('APIPGD_URL')+'\n'+'foi negada. Se desejar, solicite informações via pgd@gestao.gov.br.'
+                mensagem = 'A solicitação de credencial para a API do PGD IN 24 foi negada. Se desejar, solicite informações via pgd@gestao.gov.br.'
                 e_mail = gmail_send_message(mensagem, field.email.data, 'seges.cginf@gmail.com', 'Credencial para API do PGD IN 24 ('+field.orgao.data+')')  
                 
                 # coloca o id do e-mail enviado na planilha. Coluna K.

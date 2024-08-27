@@ -19,10 +19,11 @@ from wtforms.fields import URLField
 
 class InformaAdminForm(FlaskForm):
 
-    url      = URLField('URL da API: ', validators=[DataRequired(message="URL da API!"),URL()])
-    email    = StringField('E-mail: ', validators=[DataRequired(message="E-mail credencial admin!"),Email()])
-    password = PasswordField('Senha: ', validators=[DataRequired(message="Informe senha do admin!")])
+    url_hom   = URLField('API Homologação: ', validators=[DataRequired(message="URL da API de homologação!"),URL()])
+    url_prod  = URLField('API Produção: ', validators=[DataRequired(message="URL da API de produção!"),URL()])
+    email     = StringField('E-mail: ', validators=[DataRequired(message="E-mail credencial admin!"),Email()])
+    password  = PasswordField('Senha: ', validators=[DataRequired(message="Informe senha do admin!")])
     
-    submit   = SubmitField('Enviar')   
+    submit    = SubmitField('Enviar')   
 
 
