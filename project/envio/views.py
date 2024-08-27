@@ -98,19 +98,19 @@ def pega_token():
 
     try:
         response_hom = requests.post(api_url_login_hom, headers=headers ,data=json.dumps(string))
+        rlogin_json_hom = response_hom.json()
     except:
         print('** ERRO AO TENTAR CONECTAR COM A API DE HOMOLOGAÇÃO **')
         flash('Não consegui conexão com a API, verifique se '+os.getenv('APIPGD_URL_HOM')+' está on line.','erro')
         
     try:
         response_prod = requests.post(api_url_login_prod, headers=headers ,data=json.dumps(string))
+        rlogin_json_prod = response_prod.json()
     except:
         print('** ERRO AO TENTAR CONECTAR COM A API DE PRODUÇÃO **')
         flash('Não consegui conexão com a API, verifique se '+os.getenv('APIPGD_URL_PROD')+' está on line.','erro')    
 
-    rlogin_json_hom = response_hom.json()
-    rlogin_json_prod = response_prod.json()
-        
+     
     try:
         token_hom = rlogin_json_hom['access_token']
     except:
